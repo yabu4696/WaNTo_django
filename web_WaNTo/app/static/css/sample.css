@@ -1,3 +1,22 @@
+body{
+    background-color: rgba(245, 245, 220, 0.753); 
+}
+
 h1{
-    color: aqua;
+    text-align: center;
+    color: aliceblue;
+    background-color: rgba(141, 32, 37, 0.897);
+}
+
+.form {
+    text-align: right;
+    padding-right: 100px;
+    padding-top: 30px;
+    font-size: 18px;
+}
+
+ul {
+    padding-left: 150px;
+    list-style-position: inside;
+    font-size: 32px;
 }
