@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  web:
+    # コンテナ名
+    container_name: web_wanto
+    # ビルドするdockerファイルが格納されたディレクトリ
+    build: ./web_WaNTo
+    image: web_wanto
+    # 正常起動後に実行するコマンド
+    command: python3 manage.py runserver 0.0.0.0:8800
+    volumes:
+      # マウントするディレクトリ
+      - ./web_WaNTo:/workspace
+    ports:
+      # ホスト側のポート：コンテナ側のポート
+      - 8800:8800
+    env_file:
+      # 環境変数に設定するファイル
+      - ./web_WaNTo/.env
+    depends_on:
+      # 接続するサービス
+      - db
+
+  db:
+    container_name: db_wanto
+    build: ./db_WaNTo
+    image: db_wanto
+    volumes:
+      # /var/lib/postgresql/dataにDBのデータが格納されている
+      - ./db_WaNTo/wanto_data:/var/lib/postgresql/data
+    env_file: 
+      - ./db_WaNTo/.env
+    ports:
+      # ホスト側のポートはローカルのpsqlとバッティングするので5432以外にする
+      - 5434:5432
+
+volumes:
+  wanto_data:
+    external: 
+      name: wanto_postgres 
+
+  
