@@ -19,7 +19,7 @@
     {% if items %}
     {% for item in items %}
     <ul>
-        <li>{{ item.item_name }}</li>
+        <li><a href="{% url 'app:detail' item.pk %}">{{ item.item_name }}</li>
     </ul>
     {% endfor %}
     {% endif %}

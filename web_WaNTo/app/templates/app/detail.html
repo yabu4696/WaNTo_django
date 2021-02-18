@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href="{% static 'css/sample.css' %}">
+</head>
+<body>
+    <h1>WaNTo</h1>
+    <h2>{{ item.item_name }}</h2>
+    <ul>
+        <li>url list</li>
+        {% for url in url_list %}
+        <p><a href="{{ url }}">{{ url }}</a></p>
+        {% endfor %}
+        <li>except url list</li>
+        {% for except_url in except_url_list %}
+        <p><a href="{{ except_url }}">{{ except_url }}</a></p>
+        {% endfor %}
+    </ul>
+</body>
+</html>
