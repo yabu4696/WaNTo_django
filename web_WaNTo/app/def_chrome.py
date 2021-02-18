@@ -1,9 +1,11 @@
-import urllib.request as req
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import time 
 import re
+import requests
 
 def make_driver():
     CHROME_BIN = '/opt/google/chrome/chrome'
@@ -26,7 +28,6 @@ def make_driver():
 
 
 def search(driver, kw):
-    # kw = input('検索：')
     input_element = driver.find_element_by_name('q')
     input_element.clear()
     input_element.send_keys(kw)
@@ -40,40 +41,55 @@ def re_pattern(except_file):
     pattern = re.compile(pattern_list)
     return pattern
 
-def adress_list(driver,url_list,except_url_list,pattern):
+def get_title(url):
+    headers_dic = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
+    url_info = requests.get(url,headers=headers_dic)
+    url_html = BeautifulSoup(url_info.content, "html.parser")
+    title = url_html.find('title')
+    return title.text
+
+def macth_search(url_dict, domain_name):
+    flag=False
+    for key in url_dict.keys():
+        if domain_name in key :
+            flag = True
+            break
+    return flag
+
+def adress_list(driver,pattern,url_dict,except_url_dict):
     class_name = "yuRUbf"
     class_elems = driver.find_elements_by_class_name(class_name)
-
     for elem in class_elems:
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
-        if pattern.search(url):
-            except_url_list.append(url)
+        domain_name = urlparse(url).netloc
+        if bool(pattern.search(domain_name)):
+            title = get_title(url)
+            flag = macth_search(except_url_dict,domain_name)
+            if flag:
+                continue
+            except_url_dict[url] = title
         else:
-            url_list.append(url)
-    return url_list,except_url_list
+            title = get_title(url)
+            flag = macth_search(url_dict,domain_name)
+            if flag:
+                continue
+            url_dict[url] = title
+    return url_dict,except_url_dict
 
 def next_page(driver):
     next_button = driver.find_element_by_id("pnnext")
     next_button.click()
 
 
+# main
 def get_url(driver,page_range,except_file):
     page_range += 1
     pattern = re_pattern(except_file)
-    url_list = []
-    except_url_list = []
+    url_dict = {}
+    except_url_dict = {}
     for page_num in range(1,page_range):
-        url_list,except_url_list = adress_list(driver,url_list,except_url_list,pattern)
+        url_dict,except_url_dict = adress_list(driver,pattern, url_dict, except_url_dict)
         next_page(driver)
-    # print('Get URL!')
-    return url_list,except_url_list
-
-def screen_shot(driver):
-    page_width = driver.execute_script('return document.body.scrollWidth')
-    page_height = driver.execute_script('return document.body.scrollHeight')
-    print('page_width', page_width, sep=':')
-    print('page_height', page_height, sep=':')
-    driver.set_window_size(page_width, page_height)
-    driver.save_screenshot('search_results.png')
+    return url_dict,except_url_dict
 

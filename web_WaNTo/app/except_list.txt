@@ -1,3 +1,11 @@
 amazon
 youtube
 rakuten
+wikipedia
+kakaku.com
+biccamera
+yodobashi
+auctions
+yahoo
+yamada-denki
+

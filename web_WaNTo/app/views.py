@@ -20,15 +20,16 @@ def detail(request, pk):
     def_chrome.search(driver,item.item_name)
 
     except_file = '/workspace/app/except_list.txt'
-    page_range = 3
+    pattern = def_chrome.re_pattern(except_file)
+    page_range = 1
 
-    url_list,except_url_list = def_chrome.get_url(driver,page_range,except_file)
+    url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file)
     driver.close()
 
     return render(request, 'app/detail.html', {
          'item':item,
-         'url_list':url_list, 
-         'except_url_list':except_url_list
+         'url_dict':url_dict, 
+         'except_url_dict':except_url_dict
          })
 
 def form(request):
