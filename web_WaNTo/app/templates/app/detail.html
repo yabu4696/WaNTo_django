@@ -12,12 +12,12 @@
     <h2>{{ item.item_name }}</h2>
     <ul>
         <li>url list</li>
-        {% for url in url_list %}
-        <p><a href="{{ url }}">{{ url }}</a></p>
+        {% for url,title in url_dict.items %}
+        <p><a href="{{ url }}">{{ title }}</a></p>
         {% endfor %}
         <li>except url list</li>
-        {% for except_url in except_url_list %}
-        <p><a href="{{ except_url }}">{{ except_url }}</a></p>
+        {% for except_url,except_title in except_url_dict.items %}
+        <p><a href="{{ except_url }}">{{ except_title }}</a></p>
         {% endfor %}
     </ul>
 </body>
