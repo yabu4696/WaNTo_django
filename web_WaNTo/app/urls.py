@@ -7,4 +7,6 @@ urlpatterns = [
     path('',  views.index, name='index'),
     path('<int:pk>/detail', views.detail, name='detail'),
     path('form', views.form, name='form'),
+    path('delete', views.delete, name='delete'),
+    path('<int:pk>/reload',views.reload, name='reload'),
 ]

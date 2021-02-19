@@ -6,3 +6,5 @@ class WantoitemForm(forms.ModelForm):
         model = Wantoitem
         fields = ('item_name',)
 
+
+

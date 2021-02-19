@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 import time 
 import re
 import requests
+import os
 
 def make_driver():
     CHROME_BIN = '/opt/google/chrome/chrome'
@@ -45,6 +46,7 @@ def re_pattern(except_file):
 
 def get_title(url):
     headers_dic = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
+    os.environ['CURL_CA_BUNDLE'] = ''
     url_info = requests.get(url,headers=headers_dic)
     url_html = BeautifulSoup(url_info.content, "html.parser")
     title = url_html.find('title')
@@ -95,6 +97,5 @@ def get_url(driver,page_range,except_file):
         url_dict,except_url_dict = adress_list(driver,url_dict,except_url_dict,pattern)
         next_page(driver)
     return url_dict,except_url_dict
-
 
 
