@@ -8,4 +8,8 @@ yodobashi
 auctions
 yahoo
 yamada-denki
+<<<<<<< HEAD
 
+=======
+mercari
+>>>>>>> 727d432ec557e6924c3882a8cdc7c0aae4ab71f5

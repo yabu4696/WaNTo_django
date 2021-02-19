@@ -20,7 +20,10 @@ def detail(request, pk):
     def_chrome.search(driver,item.item_name)
 
     except_file = '/workspace/app/except_list.txt'
+<<<<<<< HEAD
     pattern = def_chrome.re_pattern(except_file)
+=======
+>>>>>>> 727d432ec557e6924c3882a8cdc7c0aae4ab71f5
     page_range = 1
 
     url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file)
