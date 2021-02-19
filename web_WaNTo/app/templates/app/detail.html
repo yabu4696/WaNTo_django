@@ -8,18 +8,28 @@
     <link rel='stylesheet' href="{% static 'css/sample.css' %}">
 </head>
 <body>
-    <h1>WaNTo</h1>
+    <a href="{% url 'app:index' %}"><h1>WaNTo</h1></a>
     <h2>{{ item.item_name }}</h2>
+<<<<<<< HEAD
     <h3>{{ pattern }}</h3>
+=======
+    <div class="form">
+        <form action="{% url 'app:reload' item.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">更新</button>
+        </form>
+
+    </div>
+>>>>>>> 78be502eb7f8c44fa3d8cb876c4a029274de8c2c
     <ul>
         <li>url list</li>
-        {% for url,title in url_dict.items %}
-        <p><a href="{{ url }}">{{ title }}</a></p>
+        {% for main_list in main_lists %}
+        <p><a href="{{ main_list.main_url }}">{{ main_list.main_title }}</a></p>
         {% endfor %}
         
         <li>except url list</li>
-        {% for except_url,except_title in except_url_dict.items %}
-        <p><a href="{{ except_url }}">{{ except_title }}</a></p>
+        {% for except_list in except_lists %}
+        <p><a href="{{ except_list.except_url }}">{{ except_list.except_title }}</a></p>
         {% endfor %}
     </ul>
 </body>

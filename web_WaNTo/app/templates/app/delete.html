@@ -6,14 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/sample.css' %}">
+
 </head>
 <body>
     <a href="{% url 'app:index' %}"><h1>WaNTo</h1></a>
-    <h3>アイテム登録</h3>
-    <form method="POST" class='new_item'>
+    <h3>削除</h3>
+    <form action="" method="POST"　class="new_item">
+        {% for item in items %}
+            <p><input type="checkbox" name="delete" value="{{ item.pk }}"> {{ item.item_name }} </p>
+        {% endfor %}
         {% csrf_token %}
-        {{ form }}
-        <button type="submit">登録</button> 
+        <button type="submit">削除</button>
     </form>
 </body>
 </html>

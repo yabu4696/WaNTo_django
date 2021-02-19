@@ -11,11 +11,13 @@
 </head>
 
 <body>
-    <h1>WaNTo</h1>
+    <a href="{% url 'app:index' %}"><h1>WaNTo</h1></a>
 
     <div class="form">
-        <a href="{% url 'app:form' %}">新しいアイテム</a>
+        <a href="{% url 'app:form' %}">新しいアイテム</a><br>
+        <a href="{% url 'app:delete' %}">削除</a>
     </div>
+
     {% if items %}
     {% for item in items %}
     <ul>
@@ -23,6 +25,9 @@
     </ul>
     {% endfor %}
     {% endif %}
+    {% for url,title in url_dict.items %}
+    <p><a href="{{ url }}">{{ title }}</a></p>
+    {% endfor %}
 </body>
 
 </html>
