@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 import time 
 import re
 import requests
+
 def make_driver():
     CHROME_BIN = '/opt/google/chrome/chrome'
     CHROME_DRIVER = '/opt/chrome/chromedriver'
@@ -49,6 +50,14 @@ def get_title(url):
     title = url_html.find('title')
     return title.text
 
+def macth_search(dictionary, domain_name):
+    flag=False
+    for key in dictionary.keys():
+        if domain_name in key :
+            flag = True
+            break
+    return flag
+
 def adress_list(driver,url_dict,except_url_dict,pattern):
     class_name = "yuRUbf"
     class_elems = driver.find_elements_by_class_name(class_name)
@@ -56,11 +65,19 @@ def adress_list(driver,url_dict,except_url_dict,pattern):
     for elem in class_elems:
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
+        parsed_url = urlparse(url)
+        domain_name = parsed_url.netloc
         if bool(pattern.search(url)):
             title = get_title(url)
+            flag = macth_search(except_url_dict,domain_name)
+            if flag:
+                continue            
             except_url_dict[url] = title
         else:
             title = get_title(url)
+            flag = macth_search(url_dict,domain_name)
+            if flag:
+                continue
             url_dict[url] = title
     return url_dict,except_url_dict
 
@@ -77,14 +94,7 @@ def get_url(driver,page_range,except_file):
     for page_num in range(1,page_range):
         url_dict,except_url_dict = adress_list(driver,url_dict,except_url_dict,pattern)
         next_page(driver)
-    # print('Get URL!')
     return url_dict,except_url_dict
 
-def screen_shot(driver):
-    page_width = driver.execute_script('return document.body.scrollWidth')
-    page_height = driver.execute_script('return document.body.scrollHeight')
-    print('page_width', page_width, sep=':')
-    print('page_height', page_height, sep=':')
-    driver.set_window_size(page_width, page_height)
-    driver.save_screenshot('search_results.png')
+
 

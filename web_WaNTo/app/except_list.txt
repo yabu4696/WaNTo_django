@@ -8,3 +8,4 @@ yodobashi
 auctions
 yahoo
 yamada-denki
+mercari
