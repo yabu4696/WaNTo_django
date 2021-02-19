@@ -15,10 +15,11 @@ class Wantoitem(models.Model):
         driver.get("https://google.com")
         def_chrome.search(driver,self.item_name)
 
-        except_file = '/workspace/app/except_list.txt'
+        except_file_main = './app/except_main_list.txt'
+        except_file_sub = './app/except_sub_list.txt'
         page_range = 1
 
-        url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file)
+        url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file_main,except_file_sub)
         driver.close()
         return url_dict,except_url_dict
 

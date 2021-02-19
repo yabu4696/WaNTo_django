@@ -37,9 +37,12 @@ def search(driver, kw):
     input_element.send_keys(Keys.RETURN)
     time.sleep(2)  
 
-def re_pattern(except_file):
-    with open(except_file) as f:
-        pattern_lists = [s.strip() for s in f.readlines()]
+def re_pattern(except_file_main,except_file_sub):
+    with open(except_file_main) as f:
+        pattern_main_lists = [s.strip() for s in f.readlines()]
+    with open(except_file_sub) as f:
+        pattern_sub_lists = [s.strip() for s in f.readlines()]
+    pattern_lists = pattern_main_lists + pattern_sub_lists
     pattern_list = '|'.join(pattern_lists)
     pattern = re.compile(pattern_list)
     return pattern
@@ -67,8 +70,7 @@ def adress_list(driver,url_dict,except_url_dict,pattern):
     for elem in class_elems:
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
-        parsed_url = urlparse(url)
-        domain_name = parsed_url.netloc
+        domain_name = urlparse(url).netloc
         if bool(pattern.search(url)):
             title = get_title(url)
             flag = macth_search(except_url_dict,domain_name)
@@ -88,9 +90,9 @@ def next_page(driver):
     next_button.click()
 
 
-def get_url(driver,page_range,except_file):
+def get_url(driver,page_range,except_file_main,except_file_sub):
     page_range += 1
-    pattern = re_pattern(except_file)
+    pattern = re_pattern(except_file_main,except_file_sub)
     url_dict = {}
     except_url_dict = {}
     for page_num in range(1,page_range):

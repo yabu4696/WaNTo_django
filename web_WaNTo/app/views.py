@@ -5,17 +5,11 @@ from .models import Wantoitem, Main, Except
 
 # chrome関数
 from . import def_chrome 
-
+from urllib.parse import urlparse
 
 
 def index(request):
-    items = Wantoitem.objects.all()
-    # for item in items:
-    #     url_dict,except_url_dict = item.scraping()
-    #     for url,title in url_dict.items():
-    #         item.main_set.create(main_url=url,main_title=title)
-    #     for except_url,except_title in except_url_dict.items():
-    #         item.except_set.create(except_url=except_url,except_title=except_title)              
+    items = Wantoitem.objects.all()             
     return render(request, 'app/index.html', {
          'items':items,      
         })
@@ -68,3 +62,16 @@ def reload(request, pk):
         return redirect('app:detail', pk=pk)
     else:
         return redirect('app:detail', pk=pk)
+
+def exclusion(request, pk):
+    if request.method == 'POST':
+        main = get_object_or_404(Main,pk=pk)
+        domain_name = urlparse(main.main_url).netloc
+        with open('./app/except_sub_list.txt', mode='a') as f:
+            f.write('\n'+domain_name)
+        return redirect('app:detail', pk=main.wantoitem.pk)
+    else:
+        main = get_object_or_404(Main,pk=pk)
+        return redirect('app:detail', pk=main.wantoitem.pk)
+        
+

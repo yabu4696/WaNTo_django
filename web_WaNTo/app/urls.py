@@ -9,4 +9,5 @@ urlpatterns = [
     path('form', views.form, name='form'),
     path('delete', views.delete, name='delete'),
     path('<int:pk>/reload',views.reload, name='reload'),
+    path('<int:pk>/exclusion', views.exclusion, name='exclusion')
 ]
