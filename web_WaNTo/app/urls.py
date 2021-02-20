@@ -8,6 +8,7 @@ urlpatterns = [
     path('<int:pk>/detail', views.detail, name='detail'),
     path('form', views.form, name='form'),
     path('delete', views.delete, name='delete'),
+    path('<int:pk>/edit', views.edit,name='edit'),
     path('<int:pk>/reload',views.reload, name='reload'),
     path('<int:pk>/exclusion', views.exclusion, name='exclusion')
 ]

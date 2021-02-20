@@ -1,0 +1,11 @@
+{% extends 'app/base.html' %}
+{% block content %}
+    <h3>除外</h3>
+    <form action="{% url 'app:exclusion' item.pk %}" method="POST"　class="new_item">
+        {% for main in main_list %}
+            <p><input type="checkbox" name="exclusion" value="{{ main.pk }}"> {{ main.main_title }} </p>
+        {% endfor %}
+        {% csrf_token %}
+        <button type="submit">除外</button>
+    </form>
+{% endblock %}

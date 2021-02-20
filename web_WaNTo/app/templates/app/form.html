@@ -1,19 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/sample.css' %}">
-</head>
-<body>
-    <a href="{% url 'app:index' %}"><h1>WaNTo</h1></a>
-    <h3>アイテム登録</h3>
+{% extends 'app/base.html' %}
+{% block content %}
+    <h3>アイテム</h3>
     <form method="POST" class='new_item'>
         {% csrf_token %}
         {{ form }}
         <button type="submit">登録</button> 
     </form>
-</body>
-</html>
+{% endblock %}

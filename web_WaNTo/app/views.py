@@ -49,6 +49,21 @@ def delete(request):
         items = Wantoitem.objects.all()
         return render(request, 'app/delete.html', {'items':items})
 
+def exclusion(request,pk):
+    if request.method == 'POST':
+        main_pks = request.POST.getlist('exclusion')
+        exec_list = Main.objects.filter(pk__in=main_pks)
+        for main in exec_list:
+            domain_name = urlparse(main.main_url).netloc
+            with open('./app/except_sub_list.txt', mode='a') as f:
+                f.write('\n'+domain_name)
+        exec_list.delete()
+        return redirect('app:detail', pk=pk)
+    else:
+        item = get_object_or_404(Wantoitem, pk=pk)
+        main_list = Main.objects.filter(wantoitem=item)
+        return render(request, 'app/exclusion.html', {'item':item ,'main_list':main_list})
+
 def reload(request, pk):
     if request.method == 'POST':
         item = get_object_or_404(Wantoitem,pk=pk)
@@ -63,15 +78,27 @@ def reload(request, pk):
     else:
         return redirect('app:detail', pk=pk)
 
-def exclusion(request, pk):
+
+def edit(request, pk):
+    item = get_object_or_404(Wantoitem,pk=pk)
     if request.method == 'POST':
-        main = get_object_or_404(Main,pk=pk)
-        domain_name = urlparse(main.main_url).netloc
-        with open('./app/except_sub_list.txt', mode='a') as f:
-            f.write('\n'+domain_name)
-        return redirect('app:detail', pk=main.wantoitem.pk)
+        form = WantoitemForm(request.POST,instance=item)
+        if form.is_valid():
+            form.save()
+            edit_item = get_object_or_404(Wantoitem,pk=pk)
+            Main.objects.filter(wantoitem=item).delete()
+            Except.objects.filter(wantoitem=item).delete()
+            url_dict,except_url_dict = edit_item.scraping()
+            for url,title in url_dict.items():
+                Main.objects.create(wantoitem=edit_item,main_url=url,main_title=title)
+            for except_url,except_title in except_url_dict.items():
+                Except.objects.create(wantoitem=edit_item,except_url=except_url,except_title=except_title)
+        return redirect('app:detail', pk=pk)
+
     else:
-        main = get_object_or_404(Main,pk=pk)
-        return redirect('app:detail', pk=main.wantoitem.pk)
+        form = WantoitemForm(instance=item)
+        return render(request, 'app/form.html',{'form':form})
+
+
         
 

@@ -1,18 +1,5 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/sample.css' %}">
-</head>
-
-<body>
-    <a href="{% url 'app:index' %}"><h1>WaNTo</h1></a>
-
+{% extends 'app/base.html' %}
+{% block content %}
     <div class="form">
         <a href="{% url 'app:form' %}">新しいアイテム</a><br>
         <a href="{% url 'app:delete' %}">削除</a>
@@ -28,6 +15,4 @@
     {% for url,title in url_dict.items %}
     <p><a href="{{ url }}">{{ title }}</a></p>
     {% endfor %}
-</body>
-
-</html>
+{% endblock %}

@@ -36,8 +36,58 @@ p{
     font-size: 18px;
 }
 
+a:hover, a:active {
+    color: rgba(141, 32, 37, 0.897);
+}
 
-a:link, a:visited, a:hover, a:active a:not(:nth-child(1)){
+a{
     text-decoration: none;
     color: black;
   }
+
+.link00 {
+    font-size: 18px;
+	padding: 0.1em 0.3em 0.1em 30px;
+	padding-right: 30px;
+	position: relative;
+	text-decoration: none;
+	color: #000000;
+
+	overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.link00::before {
+	position: absolute;
+	content: '';
+	left: 0;
+	bottom:0;
+	width: 100%;
+	height: 1%;
+	transition: all 0.3s ease;
+	opacity: 0;
+	background-color: rgba(141, 32, 37, 0.493);
+	border-radius: 50px;
+}
+.link00::after {
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	content: '';
+	transition: all 0.3s ease;
+	/* border-bottom: 2px solid #EC407A; */
+	opacity: 1;
+}
+.link00:hover::before {
+	height: 100%;
+	opacity: 0.4;
+}
+.link00:hover::after {
+	left: 50%;
+	right: 50%;
+	width: 0%;
+	opacity: 0;
+}

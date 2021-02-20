@@ -73,12 +73,16 @@ def adress_list(driver,url_dict,except_url_dict,pattern):
         domain_name = urlparse(url).netloc
         if bool(pattern.search(url)):
             title = get_title(url)
+            if (len(title) > 255) or (len(url) > 200):
+                continue
             flag = macth_search(except_url_dict,domain_name)
             if flag:
                 continue            
             except_url_dict[url] = title
         else:
             title = get_title(url)
+            if (len(title) > 255) or (len(url) > 200):
+                continue
             flag = macth_search(url_dict,domain_name)
             if flag:
                 continue

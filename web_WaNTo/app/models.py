@@ -26,12 +26,12 @@ class Wantoitem(models.Model):
 class Main(models.Model):
     wantoitem = models.ForeignKey(Wantoitem, on_delete=models.CASCADE) 
     main_url = models.URLField(max_length=200)
-    main_title = models.CharField(max_length=200)
+    main_title = models.CharField(max_length=255)
 
 class Except(models.Model):
     wantoitem = models.ForeignKey(Wantoitem, on_delete=models.CASCADE)
     except_url = models.URLField(max_length =200)
-    except_title = models.CharField(max_length=200)
+    except_title = models.CharField(max_length=255)
 
 
 
