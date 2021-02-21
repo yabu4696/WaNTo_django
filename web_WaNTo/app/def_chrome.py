@@ -65,46 +65,9 @@ def macth_search(dictionary, domain_name):
             break
     return flag
 
-# def adress_list(driver,url_dict,except_url_dict,pattern):
-#     class_name = "yuRUbf"
-#     class_elems = driver.find_elements_by_class_name(class_name)
-
-#     for elem in class_elems:
-#         a_tag = elem.find_element_by_tag_name("a")
-#         url = a_tag.get_attribute("href")
-#         domain_name = urlparse(url).netloc
-#         if bool(pattern.search(url)):
-#             title = get_title(url)
-#             if (len(title) > 255) or (len(url) > 200):
-#                 continue
-#             flag = macth_search(except_url_dict,domain_name)
-#             if flag:
-#                 continue            
-#             except_url_dict[url] = title
-#         else:
-#             title = get_title(url)
-#             if (len(title) > 255) or (len(url) > 200):
-#                 continue
-#             flag = macth_search(url_dict,domain_name)
-#             if flag:
-#                 continue
-#             url_dict[url] = title
-#     return url_dict,except_url_dict
-
 def next_page(driver):
     next_button = driver.find_element_by_id("pnnext")
     next_button.click()
-
-
-# def get_url(driver,page_range,except_file_main,except_file_sub):
-#     page_range += 1
-#     pattern = re_pattern(except_file_main,except_file_sub)
-#     url_dict = {}
-#     except_url_dict = {}
-#     for page_num in range(1,page_range):
-#         url_dict,except_url_dict = adress_list(driver,url_dict,except_url_dict,pattern)
-#         next_page(driver)
-#     return url_dict,except_url_dict
 
 def re_pattern_title(contain_file):
     with open(contain_file) as f:
@@ -113,7 +76,7 @@ def re_pattern_title(contain_file):
     title_pattern = re.compile(pattern_list)
     return title_pattern
 
-def adress_list(driver,url_dict,pattern,title_pattern):
+def adress_list(driver,in_keyword,out_keyword,pattern,title_pattern):
     class_name = "yuRUbf"
     class_elems = driver.find_elements_by_class_name(class_name)
 
@@ -127,22 +90,27 @@ def adress_list(driver,url_dict,pattern,title_pattern):
                 title = get_title(url)
             except AttributeError:
                 continue
+            if (len(title) > 255) or (len(url) > 200):
+                continue
+            flag_in = macth_search(in_keyword,domain_name)
+            flag_out = macth_search(out_keyword,domain_name)
+            if flag_in or flag_out:
+                continue
             if bool(title_pattern.search(title)):
-                if (len(title) > 255) or (len(url) > 200):
-                    continue
-                flag = macth_search(url_dict,domain_name)
-                if flag:
-                    continue
-                url_dict[url] = title
-    return url_dict
+                in_keyword[url] = title
+            else:
+                out_keyword[url] = title                
+    return in_keyword,out_keyword
 
 
 def get_url(driver,page_range,except_file_main,except_file_sub,contain_file):
     page_range += 1
     pattern = re_pattern(except_file_main,except_file_sub)
     title_pattern = re_pattern_title(contain_file)
-    url_dict = {}
+    in_keyword = {}
+    out_keyword = {}
     for page_num in range(1,page_range):
-        url_dict = adress_list(driver,url_dict,pattern,title_pattern)
+        in_keyword,out_keyword = adress_list(driver,in_keyword,out_keyword,pattern,title_pattern)
         next_page(driver)
-    return url_dict
+        
+    return in_keyword, out_keyword

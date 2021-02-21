@@ -17,22 +17,22 @@
 
 </div>
 <ul>
-    <li>url list</li>
+    <h3>IN keyword</h3>
     {% for main_list in main_lists %}
-    <p>
-        <a href="{{ main_list.main_url }}" class="link00">
-            {{ main_list.main_title }}
-        </a>
-    </p>
+
+    <a href="{{ main_list.main_url }}" class="link00">
+        {{ main_list.main_title }}
+    </a>
+
     </form>
     {% endfor %}
-    <li>except url list</li>
-    {% for except_list in except_lists %}
-    <p>
-        <a href="{{ except_list.except_url }}" class="link00">
-            {{ except_list.except_title }}
-        </a>
-    </p>
+    <h3>OUT keyword</h3>
+    {% for sub_list in sub_lists %}
+
+    <a href="{{ sub_list.sub_url }}" class="link00">
+        {{ sub_list.sub_title }}
+    </a>
+
     {% endfor %}
 </ul>
 {% endblock %}
