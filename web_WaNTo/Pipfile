@@ -12,6 +12,7 @@ psycopg2-binary = "*"
 django-environ = "*" 
 gunicorn = "*"
 requests = "*"
+coverage = "*"
 
 [dev-packages]
 

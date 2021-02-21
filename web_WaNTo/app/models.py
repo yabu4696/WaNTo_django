@@ -10,6 +10,19 @@ class Wantoitem(models.Model):
     def __str__(self):
         return self.item_name
 
+    # def scraping(self):
+    #     driver = def_chrome.make_driver()
+    #     driver.get("https://google.com")
+    #     def_chrome.search(driver,self.item_name)
+
+    #     except_file_main = './app/except_main_list.txt'
+    #     except_file_sub = './app/except_sub_list.txt'
+    #     page_range = 2
+
+    #     url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file_main,except_file_sub)
+    #     driver.close()
+    #     return url_dict,except_url_dict
+    
     def scraping(self):
         driver = def_chrome.make_driver()
         driver.get("https://google.com")
@@ -17,11 +30,12 @@ class Wantoitem(models.Model):
 
         except_file_main = './app/except_main_list.txt'
         except_file_sub = './app/except_sub_list.txt'
+        contain_file = './app/contain_file.txt'
         page_range = 2
 
-        url_dict,except_url_dict = def_chrome.get_url(driver,page_range,except_file_main,except_file_sub)
+        url_dict = def_chrome.get_url(driver,page_range,except_file_main,except_file_sub,contain_file)
         driver.close()
-        return url_dict,except_url_dict
+        return url_dict
 
 class Main(models.Model):
     wantoitem = models.ForeignKey(Wantoitem, on_delete=models.CASCADE) 

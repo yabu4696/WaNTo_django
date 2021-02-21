@@ -9,6 +9,7 @@ import re
 import requests
 import os
 
+
 def make_driver():
     CHROME_BIN = '/opt/google/chrome/chrome'
     CHROME_DRIVER = '/opt/chrome/chromedriver'
@@ -25,7 +26,7 @@ def make_driver():
     options.add_argument('--headless')
 
     driver = webdriver.Chrome(options=options,executable_path = CHROME_DRIVER)
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(1)
     return driver
 
 
@@ -35,7 +36,7 @@ def search(driver, kw):
     input_element.clear()
     input_element.send_keys(kw)
     input_element.send_keys(Keys.RETURN)
-    time.sleep(2)  
+    time.sleep(2)
 
 def re_pattern(except_file_main,except_file_sub):
     with open(except_file_main) as f:
@@ -45,12 +46,13 @@ def re_pattern(except_file_main,except_file_sub):
     pattern_lists = pattern_main_lists + pattern_sub_lists
     pattern_list = '|'.join(pattern_lists)
     pattern = re.compile(pattern_list)
-    return pattern
+    return pattern  
 
 def get_title(url):
     headers_dic = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
-    os.environ['CURL_CA_BUNDLE'] = ''
-    url_info = requests.get(url,headers=headers_dic)
+    # os.environ['CURL_CA_BUNDLE'] = ''
+    ssl_path = '/usr/local/lib/python3.8/dist-packages/certifi/cacert.pem'
+    url_info = requests.get(url, verify=ssl_path ,headers=headers_dic)
     url_html = BeautifulSoup(url_info.content, "html.parser")
     title = url_html.find('title')
     return title.text
@@ -63,7 +65,55 @@ def macth_search(dictionary, domain_name):
             break
     return flag
 
-def adress_list(driver,url_dict,except_url_dict,pattern):
+# def adress_list(driver,url_dict,except_url_dict,pattern):
+#     class_name = "yuRUbf"
+#     class_elems = driver.find_elements_by_class_name(class_name)
+
+#     for elem in class_elems:
+#         a_tag = elem.find_element_by_tag_name("a")
+#         url = a_tag.get_attribute("href")
+#         domain_name = urlparse(url).netloc
+#         if bool(pattern.search(url)):
+#             title = get_title(url)
+#             if (len(title) > 255) or (len(url) > 200):
+#                 continue
+#             flag = macth_search(except_url_dict,domain_name)
+#             if flag:
+#                 continue            
+#             except_url_dict[url] = title
+#         else:
+#             title = get_title(url)
+#             if (len(title) > 255) or (len(url) > 200):
+#                 continue
+#             flag = macth_search(url_dict,domain_name)
+#             if flag:
+#                 continue
+#             url_dict[url] = title
+#     return url_dict,except_url_dict
+
+def next_page(driver):
+    next_button = driver.find_element_by_id("pnnext")
+    next_button.click()
+
+
+# def get_url(driver,page_range,except_file_main,except_file_sub):
+#     page_range += 1
+#     pattern = re_pattern(except_file_main,except_file_sub)
+#     url_dict = {}
+#     except_url_dict = {}
+#     for page_num in range(1,page_range):
+#         url_dict,except_url_dict = adress_list(driver,url_dict,except_url_dict,pattern)
+#         next_page(driver)
+#     return url_dict,except_url_dict
+
+def re_pattern_title(contain_file):
+    with open(contain_file) as f:
+        pattern_lists = [s.strip() for s in f.readlines()]
+    pattern_list = '|'.join(pattern_lists)
+    title_pattern = re.compile(pattern_list)
+    return title_pattern
+
+def adress_list(driver,url_dict,pattern,title_pattern):
     class_name = "yuRUbf"
     class_elems = driver.find_elements_by_class_name(class_name)
 
@@ -71,37 +121,28 @@ def adress_list(driver,url_dict,except_url_dict,pattern):
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
         domain_name = urlparse(url).netloc
-        if bool(pattern.search(url)):
-            title = get_title(url)
-            if (len(title) > 255) or (len(url) > 200):
-                continue
-            flag = macth_search(except_url_dict,domain_name)
-            if flag:
-                continue            
-            except_url_dict[url] = title
-        else:
-            title = get_title(url)
-            if (len(title) > 255) or (len(url) > 200):
-                continue
-            flag = macth_search(url_dict,domain_name)
-            if flag:
-                continue
-            url_dict[url] = title
-    return url_dict,except_url_dict
 
-def next_page(driver):
-    next_button = driver.find_element_by_id("pnnext")
-    next_button.click()
+        if not bool(pattern.search(url)):
+            try:
+                title = get_title(url)
+            except AttributeError:
+                continue
+            if bool(title_pattern.search(title)):
+                if (len(title) > 255) or (len(url) > 200):
+                    continue
+                flag = macth_search(url_dict,domain_name)
+                if flag:
+                    continue
+                url_dict[url] = title
+    return url_dict
 
 
-def get_url(driver,page_range,except_file_main,except_file_sub):
+def get_url(driver,page_range,except_file_main,except_file_sub,contain_file):
     page_range += 1
     pattern = re_pattern(except_file_main,except_file_sub)
+    title_pattern = re_pattern_title(contain_file)
     url_dict = {}
-    except_url_dict = {}
     for page_num in range(1,page_range):
-        url_dict,except_url_dict = adress_list(driver,url_dict,except_url_dict,pattern)
+        url_dict = adress_list(driver,url_dict,pattern,title_pattern)
         next_page(driver)
-    return url_dict,except_url_dict
-
-
+    return url_dict

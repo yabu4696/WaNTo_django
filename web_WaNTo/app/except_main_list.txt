@@ -9,3 +9,4 @@ auctions
 yahoo
 yamada-denki
 mercari
+kitamura
