@@ -14,8 +14,8 @@ def index(request):
          'items':items,
         })
     
-def detail(request, pk):
-    item = get_object_or_404(Wantoitem,pk=pk)
+def detail(request, slug):
+    item = get_object_or_404(Wantoitem,slug=slug)
     main_lists = Main.objects.filter(wantoitem=item)
     sub_lists = Sub.objects.filter(wantoitem=item)
     return render(request, 'app/detail.html', {
@@ -73,22 +73,23 @@ def reload(request):
                     Main.objects.create(wantoitem=item,main_url=url,main_title=title)
                 for sub_url,sub_title in out_keyword.items():
                     Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_title)
+                item.save()
             return redirect('app:reload')
         else:
             items = Wantoitem.objects.all().order_by('maker_name')
             return render(request, 'app/reload.html', {'items':items})
             
 
-def edit(request, pk):
+def edit(request, slug):
     if not request.user.is_superuser:
-        return redirect('app:detail', pk=pk)
+        return redirect('app:detail', slug=slug)
     else:
-        item = get_object_or_404(Wantoitem,pk=pk)
+        item = get_object_or_404(Wantoitem,slug=slug)
         if request.method == 'POST':
             form = WantoitemForm(request.POST,instance=item)
             if form.is_valid():
                 form.save()
-                edit_item = get_object_or_404(Wantoitem,pk=pk)
+                edit_item = get_object_or_404(Wantoitem,slug=slug)
                 Main.objects.filter(wantoitem=item).delete()
                 Sub.objects.filter(wantoitem=item).delete()
                 in_keyword,out_keyword = edit_item.scraping()
@@ -96,15 +97,15 @@ def edit(request, pk):
                     Main.objects.create(wantoitem=edit_item,main_url=url,main_title=title)
                 for sub_url,sub_title in out_keyword.items():
                     Sub.objects.create(wantoitem=edit_item,sub_url=sub_url,sub_title=sub_title)
-            return redirect('app:detail', pk=pk)
+            return redirect('app:detail', slug=slug)
 
         else:
             form = WantoitemForm(instance=item)
             return render(request, 'app/form.html',{'form':form})
 
-def exclusion(request,pk):
+def exclusion(request,slug):
     if not request.user.is_superuser:
-        return redirect('app:detail', pk=pk)
+        return redirect('app:detail', slug=slug)
     else:
         if request.method == 'POST':
             main_pks = request.POST.getlist('exclusion_main')
@@ -122,9 +123,9 @@ def exclusion(request,pk):
                 with open('./app/except_sub_list.txt', mode='a') as f:
                     f.write('\n'+domain_name)
             exec_list_sub.delete()
-            return redirect('app:detail', pk=pk)
+            return redirect('app:detail',slug=slug)
         else:
-            item = get_object_or_404(Wantoitem, pk=pk)
+            item = get_object_or_404(Wantoitem, slug=slug)
             main_list = Main.objects.filter(wantoitem=item)
             sub_list = Sub.objects.filter(wantoitem=item)
             return render(request, 'app/exclusion.html', {

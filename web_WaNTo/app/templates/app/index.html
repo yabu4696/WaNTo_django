@@ -4,7 +4,7 @@
     {% for item in items %}
     <ul>
  
-        <li>({{ item.maker_name }}) -- <a href="{% url 'app:detail' item.pk %}">{{ item.item_name }}</a></li>
+        <li>({{ item.maker_name }}) -- <a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></li>
     </ul>
     {% endfor %}
     {% endif %}

@@ -8,7 +8,7 @@ urlpatterns = [
     path('form', views.form, name='form'),
     path('delete', views.delete, name='delete'),
     path('reload',views.reload, name='reload'),
-    path('<int:pk>/detail', views.detail, name='detail'),
-    path('<int:pk>/detail/edit', views.edit,name='edit'),
-    path('<int:pk>/detail/exclusion', views.exclusion, name='exclusion')
+    path('<slug:slug>', views.detail, name='detail'),
+    path('<slug:slug>/edit', views.edit,name='edit'),
+    path('<slug:slug>/exclusion', views.exclusion, name='exclusion')
 ]
