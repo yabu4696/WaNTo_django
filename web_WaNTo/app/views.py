@@ -30,6 +30,7 @@ def form(request):
         if form.is_valid():
             form.save()
             new_item = Wantoitem.objects.all().latest('id')
+            
             in_keyword,out_keyword = new_item.scraping()
             for url,title in in_keyword.items():
                 Main.objects.create(wantoitem=new_item,main_url=url,main_title=title)
@@ -91,18 +92,6 @@ def reload(request, pk):
         return redirect('app:detail', pk=pk)
     else:
         return redirect('app:detail', pk=pk)
-
-# def reload(request, pk):
-#     if request.method == 'POST':
-#         item = get_object_or_404(Wantoitem,pk=pk)
-#         Main.objects.filter(wantoitem=item).delete()
-#         url_dict = item.scraping()
-#         for url,title in url_dict.items():
-#             Main.objects.create(wantoitem=item,main_url=url,main_title=title)
-#         return redirect('app:detail', pk=pk)
-#     else:
-#         return redirect('app:detail', pk=pk)
-
 
 def edit(request, pk):
     item = get_object_or_404(Wantoitem,pk=pk)

@@ -5,6 +5,3 @@ class WantoitemForm(forms.ModelForm):
     class Meta:
         model = Wantoitem
         fields = ('item_name',)
-
-
-

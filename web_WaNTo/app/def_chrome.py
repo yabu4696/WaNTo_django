@@ -69,14 +69,15 @@ def next_page(driver):
     next_button = driver.find_element_by_id("pnnext")
     next_button.click()
 
-def re_pattern_title(contain_file):
-    with open(contain_file) as f:
+def re_pattern_title(file):
+    with open(file) as f:
         pattern_lists = [s.strip() for s in f.readlines()]
     pattern_list = '|'.join(pattern_lists)
     title_pattern = re.compile(pattern_list)
     return title_pattern
 
-def adress_list(driver,in_keyword,out_keyword,pattern,title_pattern):
+def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title_out_pattern):
+    sign = False
     class_name = "yuRUbf"
     class_elems = driver.find_elements_by_class_name(class_name)
 
@@ -85,7 +86,7 @@ def adress_list(driver,in_keyword,out_keyword,pattern,title_pattern):
         url = a_tag.get_attribute("href")
         domain_name = urlparse(url).netloc
 
-        if not bool(pattern.search(url)):
+        if not bool(url_pattern.search(url)):
             try:
                 title = get_title(url)
             except AttributeError:
@@ -96,21 +97,25 @@ def adress_list(driver,in_keyword,out_keyword,pattern,title_pattern):
             flag_out = macth_search(out_keyword,domain_name)
             if flag_in or flag_out:
                 continue
-            if bool(title_pattern.search(title)):
+            if len(in_keyword)+len(out_keyword) >= 10:
+                sign = True
+                break
+            if bool(title_in_pattern.search(title)):
                 in_keyword[url] = title
-            else:
+            elif not bool(title_out_pattern.search(title)):
                 out_keyword[url] = title                
-    return in_keyword,out_keyword
+    return in_keyword,out_keyword, sign
 
-
-def get_url(driver,page_range,except_file_main,except_file_sub,contain_file):
-    page_range += 1
-    pattern = re_pattern(except_file_main,except_file_sub)
-    title_pattern = re_pattern_title(contain_file)
+def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
+    url_pattern = re_pattern(except_file_main,except_file_sub)
+    title_in_pattern = re_pattern_title(contain_title)
+    title_out_pattern = re_pattern_title(except_title)
     in_keyword = {}
     out_keyword = {}
-    for page_num in range(1,page_range):
-        in_keyword,out_keyword = adress_list(driver,in_keyword,out_keyword,pattern,title_pattern)
+    while True:
+        in_keyword,out_keyword,sign = adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title_out_pattern)
+        if sign:
+            break
         next_page(driver)
-        
+
     return in_keyword, out_keyword

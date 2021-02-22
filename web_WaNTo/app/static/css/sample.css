@@ -1,3 +1,4 @@
+/* 
 body{
     background-color: rgba(245, 245, 220, 0.753); 
     padding-left: 50px;
@@ -29,7 +30,7 @@ h2{
 ul {
     padding-left: 150px;
     list-style-position: inside;
-    font-size: 18px;
+    font-size: 32px;
 }
 
 p{
@@ -91,3 +92,4 @@ a{
 	width: 0%;
 	opacity: 0;
 }
+*/
