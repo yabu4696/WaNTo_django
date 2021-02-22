@@ -1,21 +1,6 @@
 {% extends 'app/base.html' %}
 {% block content %}
 <h2>{{ item.item_name }}</h2>
-<div class="form">
-    <form action="{% url 'app:reload' item.pk %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">更新</button>
-    </form>
-    <form action="{% url 'app:exclusion' item.pk %}">
-        {% csrf_token %}
-        <button type="submit">除外</button>
-    </form>
-    <form action="{% url 'app:edit' item.pk %}">
-        {% csrf_token %}
-        <button type="submit">編集</button>
-    </form>
-
-</div>
 <ul>
     <h3>IN keyword</h3>
     {% for main_list in main_lists %}

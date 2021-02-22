@@ -4,4 +4,4 @@ from .models import Wantoitem
 class WantoitemForm(forms.ModelForm):
     class Meta:
         model = Wantoitem
-        fields = ('item_name',)
+        fields = ('maker_name','item_name','tag')

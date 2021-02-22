@@ -18,9 +18,10 @@ class Tag(models.Model):
     
 class Wantoitem(models.Model):
     item_name = models.CharField(blank=True,null=True,max_length=255)
-    maker_name = models.ForeignKey(Item_maker,on_delete=models.PROTECT,blank=True,null=True)
+    maker_name = models.ForeignKey(Item_maker,on_delete=models.PROTECT)
     tag = models.ManyToManyField(Tag, blank=True)
 
+            
     def __str__(self):
         return self.item_name
 
