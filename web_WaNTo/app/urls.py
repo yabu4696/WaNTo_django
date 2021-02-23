@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'app'
 urlpatterns = [
+    path('rayout',views.rayout,name='rayout'),
     path('',  views.index, name='index'),
     path('form', views.form, name='form'),
     path('delete', views.delete, name='delete'),

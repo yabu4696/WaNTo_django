@@ -2,7 +2,7 @@
 {% block content %}
     {% if items %}
     {% for item in items %}
-    <ul>
+    <ul class="colored">
  
         <li>({{ item.maker_name }}) -- <a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></li>
     </ul>

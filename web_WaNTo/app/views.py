@@ -134,7 +134,8 @@ def exclusion(request,slug):
                 'sub_list':sub_list
                 })
 
-
-
+def rayout(request):
+    return render(request,'app/rayout_1.html')
+    
         
 

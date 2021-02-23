@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel='stylesheet' href="{% static 'css/style_1.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="button_burger">
+                <!-- 🍔 -->
+                <input id="menu" type="checkbox" />
+                <label for="menu" class="open">🍔</label>
+                <label for="menu" class="back"></label>
+                <!-- 🍔 -->
+                <aside>
+                    <!-- 🍔 -->
+                    <label for="menu" class="close">×</label>
+                    <!-- 🍔 -->
+            </div>
+
+            <div class="logo_header">WaNTo</div>
+
+            <form class="form_header" action="">
+                <div class="wrap_input">
+                    <input type="search">
+                </div>
+            </form>
+
+        </div>
+    </header>
+    <aside>
+        <!-- 🍔 -->
+        <label for="menu" class="close">×</label>
+        <!-- 🍔 -->
+
+        <nav>
+            <ul>
+                <li>list1</li>
+                <li>list2</li>
+                <li>list3</li>
+                <li>list4</li>
+                <li>list5</li>
+            </ul>
+        </nav>
+        <div>
+            side footer
+        </div>
+    </aside>
+    <main>
+        <div class="item_card">
+            <div>アイテム1</div>
+            <div>アイテム2</div>
+            <div>アイテム3</div>
+            <div>アイテム4</div>
+            <div>アイテム5</div>
+            <div>アイテム6</div>
+            <div>アイテム7</div>
+            <div>アイテム8</div>
+            <div>アイテム9</div>
+        </div>
+
+    </main>
+    <footer>お問い合わせ</footer>
+</body>
+
+</html>
