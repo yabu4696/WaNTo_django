@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import WantoitemForm
-from .models import Wantoitem, Main, Sub
+from .models import Wantoitem, Main, Sub, Item_maker
 
 # chrome関数
 from . import def_chrome 
@@ -10,8 +10,10 @@ from urllib.parse import urlparse
 
 def index(request):
     items = Wantoitem.objects.all().order_by('maker_name')
+    maker_list = Item_maker.objects.all()
     return render(request, 'app/index.html', {
          'items':items,
+         'maker_list':maker_list
         })
     
 def detail(request, slug):

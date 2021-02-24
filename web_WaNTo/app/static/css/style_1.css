@@ -1,124 +1,108 @@
 body {
-    /* font-size: 2rem; */
+    font-size: 2rem;
     width: 800px;
     margin: 0 auto;
     min-height: 100vh;
     display: grid;
     grid-template:
-        "... ...... ...... ...... ...... ...... ..." 10px
-        "... header header header header header ..." 50px
-        "... ...... ...... ...... ...... ...... ..." 10px
-        "... left   ...... center ...... ...... ..." 1fr
-        "... ...... ...... center ...... ...... ..." 10px
-        "... footer ...... center ...... ...... ..." 50px
-        "... ...... ...... center ...... ...... ..." 10px
-                / auto 200px 10px 1fr auto auto auto
+        " ...... ...... ...... " 25px
+        " header header header " 50px
+        " ...... ...... ...... " 50px
+        " ...... center ...... " 1fr
+            /  0px 1fr 0px
 }
+
+a{
+    text-decoration: none;
+    color: black;
+  }
+
 header {
     grid-area: header;
 }
 .container{
+    height: 50px;
     display: grid;
     grid-template:
-    "logo ...... ...... search " 50px
-            /  200px 10px 1fr 2fr 
+    "logo maker tag search " 50px
+    /  200px 1fr 1fr 200px 
 }
 
-.button_burger{
-    grid-area: burger;
-    font-size: 10px;
-}
 .logo_header{
     grid-area: logo;
     font-size: xx-large;
 }
-.form_header{
-    grid-area: search;
-    text-align: left;
+
+.maker_header{
+    grid-area: maker;
 }
 
-aside {
-    grid-area: left;
+.tag_header{
+    grid-area: tag;
+}
+
+.form_header{
+    grid-area: search;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+}
+
+.wrap_input{
+    height: 50px;
 }
 
 main {
     grid-area: center;
-    padding: 10px;
 }
 
+.item_maker{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px;
+    column-gap: 12px;
+    row-gap: 12px;
+    font-size: 30px;
+    padding-bottom: 12px;
+    text-align: center;
+}
 .item_card{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 100px;
-    column-gap: 10px;
-    row-gap: 10px;
+    grid-auto-rows: 150px;
+    column-gap: 12px;
+    row-gap: 12px;
     font-size: 30px;
-    place-items: center;
 }
 
-footer {
-    grid-area: footer;
-    font-size: 10px;
-}
-
-/* 🍔 */
-.open,
-.close {
-    display: none;
-}
-input[type="checkbox"] {
-    position: absolute;
-    left: -50vw;
-}
-/* 🍔 */
 
 @media screen and (max-width: 1000px) {
     body {
+        margin: 0 auto;
+        padding: 10px;
+        width: auto;
         grid-template:
+            "......." 10px   
             "header" 50px
             "......." 10px
             "center " 1fr
-            "......." 10px
-            "left   " 10px
-            "......." 10px
-            "footer " 10px
-            "......." 10px
     }
 
     .container{
         display: grid;
         grid-template:
-        "burger logo ......  ...... search " 50px
-                /  50px 1fr 10px 1fr 3fr 
+        "logo maker tag search " 50px
+        /  200px 1fr 1fr 200px 
     }
     
-    
-    /* 🍔 */
-    .open,
-    .close {
-        display: block;
+    .item_card{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 150px;
+        column-gap: 12px;
+        row-gap: 12px;
+        font-size: 30px;
     }
-    .open {
-        position: absolute;
-    }
-    aside {
-        position: absolute;
-        left: -250px;
-        height: 100%;
-        transition: all 0.2s;
-        background: #ffffff;
-    }
-    input[type="checkbox"]:checked ~ aside {
-        left: 0;
-    }
-    input[type="checkbox"]:checked ~ .back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8) !important;
-    }
-    /* 🍔 */
-}
 
 
 

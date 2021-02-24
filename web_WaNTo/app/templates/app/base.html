@@ -5,13 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href="{% static 'css/sample.css' %}">
+    <link rel='stylesheet' href="{% static 'css/style_1.css' %}">
     <title>WaNTo</title>
 </head>
 <body>
-    <a href="{% url 'app:index' %}">
-        <h1>WaNTo</h1>
-    </a>
+    <header class="header">
+        <div class="container">
+            <div class="logo_header"><a href="{% url 'app:index' %}">
+                WaNTo
+            </a></div>
+            <div class="maker_header">メーカー</div>
+            <div class="tag_header">タグ</div>
+            <form class="form_header" action="">
+                <div class="wrap_input">
+                    <input type="search">
+                </div>
+            </form>
+
+        </div>
+    </header>
     {% block content %}
     {% endblock %}
     

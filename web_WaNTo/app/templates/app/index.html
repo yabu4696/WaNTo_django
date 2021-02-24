@@ -1,11 +1,19 @@
 {% extends 'app/base.html' %}
 {% block content %}
+<main>
     {% if items %}
-    {% for item in items %}
-    <ul class="colored">
- 
-        <li>({{ item.maker_name }}) -- <a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></li>
-    </ul>
+    {% for maker in maker_list %}
+    <div class="item_maker">
+        <div>{{ maker.name }}</div>
+        <div class="item_card">
+        {% for item in items %}
+        {% if item.maker_name == maker %}
+            <div><a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
     {% endfor %}
     {% endif %}
+</main>
 {% endblock %}
