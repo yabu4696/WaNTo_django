@@ -45,8 +45,10 @@ class Main(models.Model):
     wantoitem = models.ForeignKey(Wantoitem, on_delete=models.CASCADE) 
     main_url = models.URLField(max_length=200)
     main_title = models.CharField(max_length=255)
+    main_ogp_img = models.URLField(max_length =200,blank=True,null=True)
 
 class Sub(models.Model):
     wantoitem = models.ForeignKey(Wantoitem, on_delete=models.CASCADE)
     sub_url = models.URLField(max_length =200)
     sub_title = models.CharField(max_length=255)
+    sub_ogp_img = models.URLField(max_length =200,blank=True,null=True)

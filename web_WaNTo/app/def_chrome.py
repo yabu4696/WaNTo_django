@@ -8,6 +8,7 @@ import time
 import re
 import requests
 import os
+from collections import defaultdict
 
 
 def make_driver():
@@ -55,7 +56,8 @@ def get_title(url):
     url_info = requests.get(url, verify=ssl_path ,headers=headers_dic)
     url_html = BeautifulSoup(url_info.content, "html.parser")
     title = url_html.find('title')
-    return title.text
+    ogp_img = url_html.find('meta',property="og:image").get('content')
+    return title.text, ogp_img
 
 def macth_search(dictionary, domain_name):
     flag=False
@@ -88,30 +90,32 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
 
         if not bool(url_pattern.search(url)):
             try:
-                title = get_title(url)
+                title,ogp_img = get_title(url)
             except AttributeError:
                 continue
-            if (len(title) > 255) or (len(url) > 200):
+            if (len(title) > 255) or (len(url) > 200) or (len(ogp_img) > 200):
                 continue
             flag_in = macth_search(in_keyword,domain_name)
             flag_out = macth_search(out_keyword,domain_name)
             if flag_in or flag_out:
                 continue
-            if len(in_keyword)+len(out_keyword) >= 10:
+            if len(in_keyword)+len(out_keyword) >= 30:
                 sign = True
                 break
             if bool(title_in_pattern.search(title)):
-                in_keyword[url] = title
+                in_keyword[url].append(title)
+                in_keyword[url].append(ogp_img)
             elif not bool(title_out_pattern.search(title)):
-                out_keyword[url] = title                
+                out_keyword[url].append(title)
+                out_keyword[url].append(ogp_img)            
     return in_keyword,out_keyword, sign
 
 def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
     url_pattern = re_pattern(except_file_main,except_file_sub)
     title_in_pattern = re_pattern_title(contain_title)
     title_out_pattern = re_pattern_title(except_title)
-    in_keyword = {}
-    out_keyword = {}
+    in_keyword = defaultdict(list)
+    out_keyword = defaultdict(list)
     while True:
         in_keyword,out_keyword,sign = adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title_out_pattern)
         if sign:

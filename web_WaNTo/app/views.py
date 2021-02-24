@@ -37,10 +37,10 @@ def form(request):
                 new_item = Wantoitem.objects.all().latest('id')
                 
                 in_keyword,out_keyword = new_item.scraping()
-                for url,title in in_keyword.items():
-                    Main.objects.create(wantoitem=new_item,main_url=url,main_title=title)
-                for sub_url,sub_title in out_keyword.items():
-                    Sub.objects.create(wantoitem=new_item,sub_url=sub_url,sub_title=sub_title)
+                for main_url,main_list in in_keyword.items():
+                    Main.objects.create(wantoitem=new_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+                for sub_url,sub_list in out_keyword.items():
+                    Sub.objects.create(wantoitem=new_item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
             return redirect('app:index')
         else:
             form = WantoitemForm()
@@ -71,10 +71,10 @@ def reload(request):
                 Main.objects.filter(wantoitem=item).delete()
                 Sub.objects.filter(wantoitem=item).delete()
                 in_keyword,out_keyword = item.scraping()
-                for url,title in in_keyword.items():
-                    Main.objects.create(wantoitem=item,main_url=url,main_title=title)
-                for sub_url,sub_title in out_keyword.items():
-                    Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_title)
+                for main_url,main_list in in_keyword.items():
+                    Main.objects.create(wantoitem=item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+                for sub_url,sub_list in out_keyword.items():
+                    Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
                 item.save()
             return redirect('app:reload')
         else:
@@ -95,10 +95,10 @@ def edit(request, slug):
                 Main.objects.filter(wantoitem=item).delete()
                 Sub.objects.filter(wantoitem=item).delete()
                 in_keyword,out_keyword = edit_item.scraping()
-                for url,title in in_keyword.items():
-                    Main.objects.create(wantoitem=edit_item,main_url=url,main_title=title)
-                for sub_url,sub_title in out_keyword.items():
-                    Sub.objects.create(wantoitem=edit_item,sub_url=sub_url,sub_title=sub_title)
+                for main_url,main_list in in_keyword.items():
+                    Main.objects.create(wantoitem=edit_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+                for sub_url,sub_list in out_keyword.items():
+                    Sub.objects.create(wantoitem=edit_item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
             return redirect('app:detail', slug=slug)
 
         else:
@@ -137,7 +137,7 @@ def exclusion(request,slug):
                 })
 
 def rayout(request):
-    return render(request,'app/rayout_1.html')
+    return render(request,'app/rayout_detail.html')
     
         
 
