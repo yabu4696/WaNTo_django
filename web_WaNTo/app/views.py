@@ -11,19 +11,41 @@ from urllib.parse import urlparse
 def index(request):
     items = Wantoitem.objects.all().order_by('maker_name')
     maker_list = Item_maker.objects.all()
+    query = request.GET.get('query')
+    if query:
+        items = items.filter(
+        Q(item_name__icontains=query)|
+        Q(maker_name__name__icontains=query)
+        ).distinct()
+        maker_lists = items.values_list('maker_name__name', flat=True)
+        maker_list = maker_list.filter(name__in=maker_lists)
     return render(request, 'app/index.html', {
          'items':items,
          'maker_list':maker_list
         })
     
 def detail(request, slug):
-    item = get_object_or_404(Wantoitem,slug=slug)
+    item = get_object_or_404(Wantoitem, slug=slug)
     main_lists = Main.objects.filter(wantoitem=item)
     sub_lists = Sub.objects.filter(wantoitem=item)
     return render(request, 'app/detail.html', {
         'item':item,
         'main_lists':main_lists,
         'sub_lists':sub_lists
+        })
+
+def maker_index(request):
+    maker_list = Item_maker.objects.all()
+    return render(request, 'app/maker_list.html', {
+        'maker_list':maker_list
+    })
+
+def maker_detail(request, slug):
+    maker = get_object_or_404(Item_maker, slug=slug)
+    items = Wantoitem.objects.filter(maker_name=maker)
+    return render(request, 'app/maker_detail.html', {
+        'items':items,
+        'maker':maker,
         })
 
 def form(request):
@@ -35,7 +57,6 @@ def form(request):
             if form.is_valid():
                 form.save()
                 new_item = Wantoitem.objects.all().latest('id')
-                
                 in_keyword,out_keyword = new_item.scraping()
                 for main_url,main_list in in_keyword.items():
                     Main.objects.create(wantoitem=new_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
@@ -138,6 +159,6 @@ def exclusion(request,slug):
 
 def rayout(request):
     return render(request,'app/rayout_detail.html')
-    
-        
+
+
 

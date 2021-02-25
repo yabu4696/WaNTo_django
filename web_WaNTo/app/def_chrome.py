@@ -93,13 +93,13 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
                 title,ogp_img = get_title(url)
             except AttributeError:
                 continue
-            if (len(title) > 255) or (len(url) > 200) or (len(ogp_img) > 200):
+            if (len(title) > 255) or (len(url) > 200) or (len(ogp_img) > 200) or (not ogp_img):
                 continue
             flag_in = macth_search(in_keyword,domain_name)
             flag_out = macth_search(out_keyword,domain_name)
             if flag_in or flag_out:
                 continue
-            if len(in_keyword)+len(out_keyword) >= 30:
+            if len(in_keyword)+len(out_keyword) >= 10:
                 sign = True
                 break
             if bool(title_in_pattern.search(title)):

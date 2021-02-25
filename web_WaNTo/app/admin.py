@@ -14,7 +14,6 @@ from app.models import Item_maker, Tag, Wantoitem
 
 class WantoitemAdmin(admin.ModelAdmin):
     fields = ('item_name', 'maker_name', 'tag', 'created_at', 'updated_at', 'slug')
-    # prepopulated_fields = {'slug': ('item_name',)}
     readonly_fields = ('created_at', 'updated_at')
 
 admin.site.register(Item_maker)

@@ -14,12 +14,10 @@
     <header class="header">
         <div class="container">
             <div class="logo_header"><a href="{% url 'app:index' %}">WaNTo</a></div>
-            <div class="maker_header">メーカー</div>
-            <div class="tag_header">タグ</div>
-            <form class="form_header" action="">
-                <div class="wrap_input">
-                    <input type="search">
-                </div>
+            <div class="maker_header"><a href="{% url 'app:maker_index' %}">メーカー</a></div>
+            <form class="form_header" action="{% url 'app:index' %}" method="GET">
+                    <input name="query" value="{{ request.GET.query }}" type="text">
+                    <button type="submit">検索</button>
             </form>
 
         </div>

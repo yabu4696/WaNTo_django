@@ -6,13 +6,14 @@
 {% block content %}
 <main>
     <div class="item_maker">
+        <div class="maker_card"><a href="{% url 'app:maker_detail' item.maker_name.slug %}">{{ item.maker_name.name }}</a></div>
         <div class="maker_card">{{ item.item_name }}</div>
         <div class="item_card">
             {% for main_list in main_lists %}
-            <div><img src="{{ main_list.main_ogp_img }}"><a href="{{ main_list.main_url }}">{{ main_list.main_title }}</a></div>
+            <a href="{{ main_list.main_url }}" target="_blank" ><img src="{{ main_list.main_ogp_img }}">{{ main_list.main_title }}</a>
             {% endfor %}
             {% for sub_list in sub_lists %}
-            <div><img src="{{ sub_list.sub_ogp_img }}"><a href="{{ sub_list.sub_url }}">{{ sub_list.sub_title }}</a></div>
+            <a href="{{ sub_list.sub_url }}" target="_blank" ><img src="{{ sub_list.sub_ogp_img }}">{{ sub_list.sub_title }}</a>
             {% endfor %}
         </div>
     </div>

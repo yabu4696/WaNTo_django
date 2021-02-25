@@ -26,36 +26,31 @@ header {
     grid-area: header;
     border-bottom: solid 2px #989898;
 }
-.container{
+header > .container{
     height: 50px;
     display: grid;
     grid-template:
-    "logo maker tag search " 50px
+    "logo ..... maker search " 50px
     /  200px 1fr 1fr 200px 
 }
 
 .logo_header{
     grid-area: logo;
     font-size: xx-large;
+    height: 50px;
+
 }
 
 .maker_header{
     grid-area: maker;
 }
 
-.tag_header{
-    grid-area: tag;
-}
 
 .form_header{
     grid-area: search;
-    text-align: right;
+    text-align: left;
     margin: 0;
     padding: 0;
-}
-
-.wrap_input{
-    height: 50px;
 }
 
 main {
@@ -78,7 +73,7 @@ main {
     .container{
         display: grid;
         grid-template:
-        "logo maker tag search " 50px
+        "logo ..... maker search " 50px
         /  1fr 1fr 1fr 1fr  
     }
 
@@ -101,7 +96,7 @@ main {
 
 
 
-
+/* 
 
 
 	
@@ -123,4 +118,4 @@ ul.colored {
 
 
 
-	
+	 */

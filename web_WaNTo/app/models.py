@@ -6,6 +6,8 @@ from . import def_chrome
 
 class Item_maker(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(null=False, unique=True)
+    
 
     def __str__(self):
         return self.name

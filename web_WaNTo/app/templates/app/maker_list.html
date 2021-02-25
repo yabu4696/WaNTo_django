@@ -5,20 +5,10 @@
 {% endblock %}
 {% block content %}
 <main>
-    {% if items %}
     {% for maker in maker_list %}
     <div class="item_maker">
         <div class="maker_card"><a href="{% url 'app:maker_detail' maker.slug %}">{{ maker.name }}</a></div>
-        <div class="item_card">
-            {% for item in items %}
-            {% if item.maker_name == maker %}
-            <div><a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></div>
-            {% endif %}
-            {% endfor %}
-        </div>
     </div>
     {% endfor %}
-    {% endif %}
 </main>
 {% endblock %}
-
