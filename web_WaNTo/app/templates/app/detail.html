@@ -1,7 +1,7 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block head %}
-<link rel='stylesheet' href="{% static 'css/style_detail.css' %}">
+<link rel='stylesheet' href="{% static 'app/css/style_detail.css' %}">
 {% endblock %}
 {% block content %}
 <main>
@@ -10,10 +10,16 @@
         <div class="maker_card">{{ item.item_name }}</div>
         <div class="item_card">
             {% for main_list in main_lists %}
-            <a href="{{ main_list.main_url }}" target="_blank" ><img src="{{ main_list.main_ogp_img }}">{{ main_list.main_title }}</a>
+            <a href="{{ main_list.main_url }}" target="_blank" >
+                <div>{{ main_list.main_title }}</div>
+                <img src="{{ main_list.main_ogp_img }}">
+            </a>
             {% endfor %}
             {% for sub_list in sub_lists %}
-            <a href="{{ sub_list.sub_url }}" target="_blank" ><img src="{{ sub_list.sub_ogp_img }}">{{ sub_list.sub_title }}</a>
+            <a href="{{ sub_list.sub_url }}" target="_blank" >
+                <div>{{ sub_list.sub_title }}</div>
+                <img src="{{ sub_list.sub_ogp_img }}">
+            </a>
             {% endfor %}
         </div>
     </div>

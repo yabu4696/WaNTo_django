@@ -1,7 +1,7 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block head %}
-<link rel='stylesheet' href="{% static 'css/style_index.css' %}">
+<link rel='stylesheet' href="{% static 'app/css/style_index.css' %}">
 {% endblock %}
 {% block content %}
 <main>
@@ -12,7 +12,7 @@
         <div class="item_card">
             {% for item in items %}
             {% if item.maker_name == maker %}
-            <div><a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></div>
+            <div class="item"><a href="{% url 'app:detail' item.slug %}">{{ item.item_name }}</a></div>
             {% endif %}
             {% endfor %}
         </div>
