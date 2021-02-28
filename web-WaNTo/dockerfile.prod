@@ -59,9 +59,9 @@ RUN pipenv install --system --skip-lock \
 
 
 # シェルスクリプトをコピー
-COPY ./entrypoint.sh /workspace/entrypoint.sh
+COPY ./entrypoint.prod.sh /workspace/entrypoint.prod.sh
 
 COPY . /workspace/
 
 # シェルスクリプトを実行
-ENTRYPOINT ["/workspace/entrypoint.sh"]
+ENTRYPOINT ["/workspace/entrypoint.prod.sh"]

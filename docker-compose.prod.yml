@@ -3,17 +3,19 @@ services:
   web:
     # コンテナ名
     container_name: web-wanto
-    # ビルドするdockerファイルが格納されたディレクトリ
-    # build: ./web-WaNTo
-    image: web-wanto
+    build:
+        # 読み込むファイル名が`Dockerfile`ではない場合contextに相対パス、dockerfileにファイル名を記載
+        context: ./web-WaNTo
+        dockerfile: dockerfile.prod
     # 正常起動後に実行するコマンド
-    command: python3 manage.py runserver 0.0.0.0:8800
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8800
     volumes:
       # マウントするディレクトリ
-      - ./web-WaNTo:/workspace
-    ports:
-      # ホスト側のポート：コンテナ側のポート
-      - 8800:8800
+      # - ./web-WaNTo:/workspace
+      - static-volume:/workspace/static
+    expose:
+      # 指定されたポートは接続されたサービスからアクセス可能
+      - 8800
     env_file:
       # 環境変数に設定するファイル
       - ./web-WaNTo/.env
@@ -27,7 +29,7 @@ services:
     image: db-wanto
     volumes:
       # /var/lib/postgresql/dataにDBのデータが格納されている
-      - ./db-WaNTo/wanto_data:/var/lib/postgresql/data
+      - ./db-WaNTo/wanto-data:/var/lib/postgresql/data
     env_file: 
       - ./db-WaNTo/.env
     ports:
@@ -39,15 +41,17 @@ services:
     # build: ./nginx-WaNTo
     image: nginx-wanto
     volumes:
-      - ./web-WaNTo/app/static:/usr/src/app/static
+      # - ./web-WaNTo/app/static:/usr/src/app/static
+      - static-volume:/usr/src/app/static
     ports:
       - 80:80
     depends_on:
       - web
 
 volumes:
-  wanto_data:
+  wanto-data:
     external: 
-      name: wanto_postgres 
-
-  
+      name: wanto-postgres 
+  static-volume:
+    external: 
+      name: wanto-static-volume
