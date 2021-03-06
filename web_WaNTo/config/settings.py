@@ -1,10 +1,7 @@
 from pathlib import Path
 import os
 from datetime import timedelta
-import environ
-
-env = environ.Env()
-env.read_env('.env')
+import urllib.parse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,10 +11,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 
-SECRET_KEY = env.get_value('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.get_value('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -31,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.apps.AppConfig',
+    'wantem.apps.WantemConfig',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -70,12 +68,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env.get_value('DATABASE_ENGINE'),
-        'NAME': env.get_value('DATABASE_DB'),
-        'USER': env.get_value('DATABASE_USER'),
-        'PASSWORD': env.get_value('DATABASE_PASSWORD'),
-        'HOST': env.get_value('DATABASE_HOST'),
-        'PORT': env.get_value('DATABASE_PORT'),
+        'ENGINE': os.environ.get('DATABASE_ENGINE'),
+        'NAME': os.environ.get('DATABASE_DB'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
@@ -119,3 +117,21 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Defined in environment settings
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID") 
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_REGION =  os.environ.get("AWS_REGION")
+
+BROKER_URL = 'sqs://{0}:{1}@'.format(
+    urllib.parse.quote(AWS_ACCESS_KEY_ID, safe=''),
+    urllib.parse.quote(AWS_SECRET_ACCESS_KEY, safe='')
+)
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'region': AWS_REGION,
+    'polling_interval': 1,
+    'queue_name_prefix': 'local-wantem-sqs.fifo'
+}
+
+
