@@ -113,10 +113,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_URL = '/staticfiles/'
+STATIC_ROOT = '/workspace/wantem/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Defined in environment settings
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID") 
@@ -134,4 +135,5 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
     'queue_name_prefix': 'local-wantem-sqs.fifo'
 }
 
+CELERY_RESULT_BACKEND = 'django-db'
 

@@ -48,6 +48,8 @@ def maker_detail(request, slug):
         'maker':maker,
         })
 
+from config.tasks import form_celery
+
 def form(request):
     if not request.user.is_superuser:
         return redirect('wantem:index')
@@ -56,12 +58,13 @@ def form(request):
             form = WantoitemForm(request.POST)
             if form.is_valid():
                 form.save()
-                new_item = Wantoitem.objects.all().latest('id')
-                in_keyword,out_keyword = new_item.scraping()
-                for main_url,main_list in in_keyword.items():
-                    Main.objects.create(wantoitem=new_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
-                for sub_url,sub_list in out_keyword.items():
-                    Sub.objects.create(wantoitem=new_item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
+                # new_item = Wantoitem.objects.all().latest('id')
+                # in_keyword,out_keyword = new_item.scraping()
+                # for main_url,main_list in in_keyword.items():
+                #     Main.objects.create(wantoitem=new_item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+                # for sub_url,sub_list in out_keyword.items():
+                #     Sub.objects.create(wantoitem=new_item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
+                form_celery.apply_async()
             return redirect('wantem:index')
         else:
             form = WantoitemForm()
@@ -79,7 +82,7 @@ def delete(request):
             items = Wantoitem.objects.all()
             return render(request, 'wantem/delete.html', {'items':items})
 
-
+from config.tasks import reload_celery
 
 def reload(request):
     if not request.user.is_superuser:
@@ -89,14 +92,15 @@ def reload(request):
             item_pks = request.POST.getlist('reload') 
             reload_items = Wantoitem.objects.filter(pk__in=item_pks)
             for item in reload_items:
-                Main.objects.filter(wantoitem=item).delete()
-                Sub.objects.filter(wantoitem=item).delete()
-                in_keyword,out_keyword = item.scraping()
-                for main_url,main_list in in_keyword.items():
-                    Main.objects.create(wantoitem=item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
-                for sub_url,sub_list in out_keyword.items():
-                    Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
-                item.save()
+                # Main.objects.filter(wantoitem=item).delete()
+                # Sub.objects.filter(wantoitem=item).delete()
+                # in_keyword,out_keyword = item.scraping()
+                # for main_url,main_list in in_keyword.items():
+                #     Main.objects.create(wantoitem=item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
+                # for sub_url,sub_list in out_keyword.items():
+                #     Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
+                # item.save()
+                reload_celery.apply_async(item_pks)
             return redirect('wantem:reload')
         else:
             items = Wantoitem.objects.all().order_by('maker_name')
@@ -173,4 +177,4 @@ def celery_test(request):
 
 	context = {'result': result}
 
-	return render(request, 'wantem/celery_test.html', context)
+	return render(request, 'wantem/celery-test.html', context)
