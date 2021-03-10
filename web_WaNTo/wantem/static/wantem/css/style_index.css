@@ -2,9 +2,9 @@
 .item_title{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 50px;
+    grid-template-rows: 39px;
     column-gap: 15px;
-    font-size: 30px;
+    font-size: 21px;
     text-align: center;
     padding-top: 15px;
     padding-bottom: 0px;
