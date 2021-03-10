@@ -6,7 +6,8 @@
     column-gap: 15px;
     font-size: 30px;
     text-align: center;
-    padding-bottom: 15px;
+    padding-top: 15px;
+    padding-bottom: 0px;
 }
 
 .item_title > .title_card{
@@ -30,7 +31,8 @@
         column-gap: 15px;
         font-size: 40px;
         text-align: center;
-        padding-bottom: 20px;
+        padding-top:15px ;
+        padding-bottom: 0px;
     }
     
     .item_title > .title_card{

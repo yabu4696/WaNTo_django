@@ -163,7 +163,7 @@ def exclusion(request,slug):
                 })
 
 def rayout(request):
-    return render(request,'wantem/rayout_detail.html')
+    return render(request,'wantem/rayout_index.html')
 
 
 from celery.result import AsyncResult

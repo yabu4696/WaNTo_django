@@ -6,12 +6,14 @@ html{
 body {
     margin: 0 auto;
     width: 100%;
+    min-height: 100vh;
     display: grid;
     grid-template:
         "....... ....... ......." 0px   
         "....... header  ......." 50px
-        "....... ....... ......." 25px
+        "....... ....... ......." 0px
         "....... main    ......." 1fr
+        "....... footer  ......." 20px
         / 10px 1fr 10px
 }  
 a{
@@ -101,10 +103,40 @@ header > .container{
 color:#5e5e5e;
 }
 
+footer{
+    grid-area: footer;
+    font-size: 11px;
+}
+
+footer > .container{
+    height: 20px;
+    display: grid;
+    grid-template:
+    "...... contact ...... question ......" 20px
+    /   1fr 1fr 1fr 1fr 1fr
+}
+.contact{
+    grid-area: contact;
+    text-align: center;
+}
+.question{
+    grid-area: question;
+    text-align: center;
+}
 
 
 main{
     grid-area: main;
+    height: 100%;
+    overflow: scroll;
+        /* IE, Edge 対応 */
+    -ms-overflow-style: none;
+    /* Firefox 対応 */
+    scrollbar-width: none;
+}
+      /* Chrome, Safari 対応 */
+main::-webkit-scrollbar {
+    display:none
 }
 
 .title_card>a{
@@ -198,16 +230,16 @@ main{
 
 @media (min-width: 600px) {
     body {
-        font-size: 2rem;
         max-width: 1024px;
         margin: 0 auto;
         min-height: 100vh;
         display: grid;
         grid-template:
-        "....... ....... ......." 25px   
+        "....... ....... ......." 20px   
         "....... header  ......." 50px
-        "....... ....... ......." 25px
+        "....... ....... ......." 0px
         "....... main    ......." 1fr
+        "....... footer  ......." 30px
         / 10px 1fr 10px
     }
   
@@ -295,7 +327,25 @@ main{
     #sbtn:hover{
     color:#5e5e5e;
     }
-    
+    footer{
+        grid-area: footer;
+        font-size: 19px;
+    }
+    footer > .container{
+        height: 30px;
+        display: grid;
+        grid-template:
+        "...... contact ...... question ......" 30px
+        /   1fr 1fr 1fr 1fr 1fr
+    }
+    .contact{
+        grid-area: contact;
+        text-align: center;
+    }
+    .question{
+        grid-area: question;
+        text-align: center;
+    }
     
 }
 
