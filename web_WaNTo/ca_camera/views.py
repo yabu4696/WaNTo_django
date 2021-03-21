@@ -12,22 +12,8 @@ from django.core.mail import BadHeaderError, EmailMessage
 from . import def_chrome 
 from urllib.parse import urlparse
 
-
 def index(request):
-    items = Wantoitem.objects.all().order_by('maker_name')
-    maker_list = Item_maker.objects.all()
-    query = request.GET.get('query')
-    if query:
-        items = items.filter(
-        Q(item_name__icontains=query)|
-        Q(maker_name__name__icontains=query)
-        ).distinct()
-        maker_lists = items.values_list('maker_name__name', flat=True)
-        maker_list = maker_list.filter(name__in=maker_lists)
-    return render(request, 'ca_camera/index.html', {
-         'items':items,
-         'maker_list':maker_list
-        })
+    return render(request, 'ca_camera/index.html')
     
 def detail(request, slug):
     item = get_object_or_404(Wantoitem, slug=slug)
@@ -95,23 +81,38 @@ def reload(request):
     else:
         if request.method == 'POST':
             item_pks = request.POST.getlist('reload') 
-            # reload_items = Wantoitem.objects.filter(pk__in=item_pks)
-            # for item in reload_items:
-                # Main.objects.filter(wantoitem=item).delete()
-                # Sub.objects.filter(wantoitem=item).delete()
-                # in_keyword,out_keyword = item.scraping()
-                # for main_url,main_list in in_keyword.items():
-                #     Main.objects.create(wantoitem=item,main_url=main_url,main_title=main_list[0],main_ogp_img=main_list[1])
-                # for sub_url,sub_list in out_keyword.items():
-                #     Sub.objects.create(wantoitem=item,sub_url=sub_url,sub_title=sub_list[0],sub_ogp_img=sub_list[1])
-                # item.save()
-            # item_pks=tuple(item_pks)
             reload_celery.apply_async(item_pks)
             return redirect('ca_camera:reload')
         else:
             items = Wantoitem.objects.all().order_by('maker_name')
             return render(request, 'ca_camera/reload.html', {'items':items})
-            
+
+def reload_one(request, slug):
+    if not request.user.is_superuser:
+        return redirect('ca_camera:detail', slug=slug)
+    else:
+        if request.method == 'POST':
+            item_pk = request.POST.getlist('reload') 
+            reload_celery.apply_async(item_pk)
+            return redirect('ca_camera:detail', slug=slug)
+        else:
+            return redirect('ca_camera:detail', slug=slug)
+
+def search_result(request):
+    items = Wantoitem.objects.all().order_by('maker_name')
+    maker_list = Item_maker.objects.all()
+    query = request.GET.get('query')
+    if query:
+        items = items.filter(
+        Q(item_name__icontains=query)|
+        Q(maker_name__name__icontains=query)
+        ).distinct()
+        maker_lists = items.values_list('maker_name__name', flat=True)
+        maker_list = maker_list.filter(name__in=maker_lists)
+    return render(request, 'ca_camera/search_result.html', {
+         'items':items,
+         'maker_list':maker_list
+        })
 
 def edit(request, slug):
     if not request.user.is_superuser:

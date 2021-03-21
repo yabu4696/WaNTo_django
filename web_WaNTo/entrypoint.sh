@@ -15,5 +15,8 @@ DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD \
 DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL \
 python3 manage.py createsuperuser --noinput
 
-celery -A config worker --detach
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+celery -A config worker -B --detach
 exec "$@"

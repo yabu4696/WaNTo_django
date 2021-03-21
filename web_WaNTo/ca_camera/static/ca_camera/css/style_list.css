@@ -23,6 +23,8 @@
     padding: 12px;
 }
 
+
+
 @media (min-width: 600px) {
     .item_title{
         display: grid;
