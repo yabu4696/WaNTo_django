@@ -14,6 +14,9 @@ from urllib.parse import urlparse
 
 def index(request):
     return render(request, 'ca_camera/index.html')
+
+def preturn(request):
+    return render(request, 'ca_camera/preturn.html')
     
 def detail(request, slug):
     item = get_object_or_404(Wantoitem, slug=slug)

@@ -5,7 +5,8 @@ from . import def_chrome
 class Item_maker(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(null=False, unique=True)
-    
+    meta_des = models.CharField(max_length=255,default='<meta name="description" content="カメラのレビューや評価サイトだけを表示したいというお悩みはありませんか？本サイトでは、カメラのレビューや評価サイトサイトだけを一覧表示！あなたに最適なアイテムを見つけてください。">')
+
 
     def __str__(self):
         return self.name
@@ -23,6 +24,7 @@ class Wantoitem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(null=False, unique=True)
+    meta_des = models.CharField(max_length=255,default='<meta name="description" content="カメラのレビューや評価サイトだけを表示したいというお悩みはありませんか？本サイトでは、カメラのレビューや評価サイトサイトだけを一覧表示！あなたに最適なアイテムを見つけてください。">')
             
     def __str__(self):
         return self.item_name
@@ -59,3 +61,5 @@ class Sub(models.Model):
     sub_url = models.URLField(max_length =200)
     sub_title = models.CharField(max_length=255)
     sub_ogp_img = models.URLField(max_length =200,blank=True,null=True)
+
+

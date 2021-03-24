@@ -1,0 +1,2 @@
+DATABASE_PASSWORD=LnzIW5bgEzvZ5op4cRnC
+DATABASE_HOST=wantem.cfzgyc7ehgfe.ap-northeast-1.rds.amazonaws.com
