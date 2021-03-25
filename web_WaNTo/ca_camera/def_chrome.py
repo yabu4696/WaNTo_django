@@ -29,8 +29,8 @@ def make_driver():
     options.add_argument('--lang=ja-JP')
     options.add_argument('--headless')
 
-    driver = webdriver.Chrome(options=options,executable_path = CHROME_DRIVER)
-    driver.implicitly_wait(1)
+    driver = webdriver.Chrome(options=options,executable_path=CHROME_DRIVER)
+    driver.implicitly_wait(10)
     return driver
 
 def kw_in_title(file):
@@ -65,12 +65,15 @@ def re_pattern(except_file_main,except_file_sub):
 
 def get_title(url):
     print('途中１-タイトル開始')
-    headers_dic = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
+    print(url)
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
+    # headers = {"User-Agent": "~~~~~"}
     # os.environ['CURL_CA_BUNDLE'] = ''
     # ssl_path = '/usr/local/lib/python3.8/dist-packages/certifi/cacert.pem'
     ssl_path = certifi.where()
-    url_info = requests.get(url,verify=ssl_path,headers=headers_dic)
-    print('途中１-リクエスト実行')
+    url_info = requests.get(url,verify=ssl_path,headers=headers,timeout=10)
+    print('non timeout')
+    # print(url_info.raise_for_status())
     url_html = BeautifulSoup(url_info.content, "html.parser")
     print('途中１-スクレイピング実行')
     title = url_html.find('title')
@@ -84,8 +87,8 @@ def macth_search(dictionary, domain_name):
             flag = True
             break
     return flag
-# url_info = requests.get(url, verify=ssl_path ,headers=headers_dic)
-# url_info = requests.get(url, verify=ssl_path , headers=headers_dic)
+# url_info = requests.get(url, verify=ssl_path ,headers=headers)
+# url_info = requests.get(url, verify=ssl_path , headers=headers)
 def next_page(driver):
     next_button = driver.find_element_by_id("pnnext")
     next_button.click()
@@ -105,14 +108,19 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
     for elem in class_elems:
         a_tag = elem.find_element_by_tag_name("a")
         url = a_tag.get_attribute("href")
+        if '.pdf' in url:
+            print('pdf除去')
+            continue
         domain_name = urlparse(url).netloc
         print('途中１-ドメイン取得')
         if not bool(url_pattern.search(url)):
             try:
                 title,ogp_img = get_title(url)
             except AttributeError:
+                print('attributeerror')
                 continue
             except requests.exceptions.SSLError:
+                print('sslerror')
                 continue
             print('途中１-タイトル取得')
             if (len(title) > 255) or (len(url) > 200) or (len(ogp_img) > 200) or (not ogp_img):
@@ -131,7 +139,7 @@ def adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title
                 out_keyword[url].append(title)
                 out_keyword[url].append(ogp_img)
         else:
-            print('途中１-パターン除去')
+            continue
     return in_keyword,out_keyword,sign
 
 def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
@@ -142,13 +150,19 @@ def get_url(driver,except_file_main,except_file_sub,contain_title,except_title):
     in_keyword = defaultdict(list)
     out_keyword = defaultdict(list)
     start_time = time.time()
-    print('途中１-ループ開始')
+    print('ループ開始')
+    page = 0
     while True:
         in_keyword,out_keyword,sign = adress_list(driver,in_keyword,out_keyword,url_pattern,title_in_pattern,title_out_pattern)
         if sign:
             break
+        page += 1
+        if page == 9:
+            break
         next_page(driver)  
         print('途中１-ネクストページ')
-        if time.time() - start_time > 180:
+        if time.time() - start_time > 300:
+            print('timeout')
             break
+    print('ループ完了')
     return in_keyword,out_keyword

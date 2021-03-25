@@ -18,5 +18,4 @@ python3 manage.py createsuperuser --noinput
 python3 manage.py makemigrations
 python3 manage.py migrate
 
-celery -A config worker -B --detach
 exec "$@"
